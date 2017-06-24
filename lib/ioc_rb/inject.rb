@@ -25,7 +25,8 @@ class Object
         class_attribute :_iocrb_injectable_attrs
         self._iocrb_injectable_attrs = { dependency_name => options.dup }
       else
-        self._iocrb_injectable_attrs = self._iocrb_injectable_attrs.merge(dependency_name => options.dup)
+        self._iocrb_injectable_attrs =
+          self._iocrb_injectable_attrs.merge(dependency_name => options.dup)
       end
       attr_accessor dependency_name
     end
