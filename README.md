@@ -66,6 +66,55 @@ container = IocRb::Container.new do |c|
 end
 ```
 
+
+
+## Inheriting from other containers
+Quite often you will want to selectively override some parts of the system, use `IocRb::Container.with_parent` to
+create a new container with all the beans copied from the parent container.
+
+```ruby
+class ContactBook
+  inject :contacts_repository
+  inject :validator, ref: :contact_validator
+end
+class ContactBookService
+  inject :contacts_repository
+  inject :validator, ref: :contact_validator
+end
+class ContactsRepository
+end
+class ContactValidator
+end
+class TestContactValidator
+end
+
+class AnotherTestContactValidator
+end
+
+parent = IocRb::Container.new do |c|
+  c.bean(:contacts_repository,  class: ContactsRepository)
+  c.bean(:contact_validator,    class: ContactValidator)
+  c.bean(:contact_book,         class: ContactBook)
+  c.bean(:contact_book_service, class: "ContactBookService")
+end
+puts parent[:contact_book_service].inspect
+#=> #<ContactBookService:0x007fe9e18c3bb0 @contacts_repository=#<ContactsRepository:0x007fe9e18c3b38>, @validator=#<ContactValidator:0x007fe9e18c3a98>>
+
+testcontainer = IocRb::Container.with_parent(parent) do |c|
+  c.bean(:contact_validator,    class: TestContactValidator)
+end
+puts testcontainer[:contact_book_service].inspect
+#=> #<ContactBookService:0x007fe9e18c30c0 @contacts_repository=#<ContactsRepository:0x007fe9e18c2fd0>, @validator=#<TestContactValidator:0x007fe9e18c2f08>>
+
+third = IocRb::Container.with_parent(parent) do |c|
+  c.bean(:contact_validator,    class: AnotherTestContactValidator)
+end
+
+puts third[:contact_book_service].inspect
+#=> #<ContactBookService:0x007fe9e18c2328 @contacts_repository=#<ContactsRepository:0x007fe9e18c2238>, @validator=#<AnotherTestContactValidator:0x007fe9e18c21c0>>
+```
+
+
 ## Installation
 
 Add this line to your application's Gemfile:
