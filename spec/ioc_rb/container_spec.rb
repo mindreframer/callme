@@ -222,6 +222,14 @@ describe IocRb::Container do
       expect(parent[:contact_book_service].validator).to be_a(AnotherTestContactValidator)
       expect(container[:contact_book_service].validator).to be_a(TestContactValidator)
     end
-  end
 
+    it "changes in child container do not affect parent container" do
+      expect(parent[:contact_book_service].validator).to be_a(ContactValidator)
+      container.replace_bean(:contact_validator, class: AnotherTestContactValidator)
+      parent.reset!
+      container.reset!
+      expect(parent[:contact_validator]).to be_a(ContactValidator)
+      expect(container[:contact_validator]).to be_a(AnotherTestContactValidator)
+    end
+  end
 end

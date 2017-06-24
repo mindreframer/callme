@@ -40,7 +40,7 @@ module IocRb
 
     def self.with_parent(parent_container, &block)
       const_loader           = parent_container.instance_variable_get("@const_loader")
-      beans_metadata_storage = parent_container.instance_variable_get("@beans_metadata_storage")
+      beans_metadata_storage = parent_container.instance_variable_get("@beans_metadata_storage").copy
       container              = self.new(const_loader)
       container.instance_eval do
         @beans_metadata_storage = beans_metadata_storage

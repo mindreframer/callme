@@ -1,7 +1,7 @@
 # Storage of bean metadatas
 class IocRb::BeansMetadataStorage
-  def initialize
-    @bean_metadatas = {}
+  def initialize(bean_metadatas = {})
+    @bean_metadatas = bean_metadatas
   end
 
   # Finds bean metadata in storage by it's name
@@ -23,5 +23,10 @@ class IocRb::BeansMetadataStorage
 
   def keys
     @bean_metadatas.keys
+  end
+
+  # Creates an independent copy of this instance
+  def copy
+    self.class.new(@bean_metadatas.dup)
   end
 end
