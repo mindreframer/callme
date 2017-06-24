@@ -13,7 +13,6 @@ module IocRb
   # may be retrieved by asking for them by name (via the [] operator)
   class Container
     DEFAULT_CONST_LOADER = IocRb::ConstLoaders::Native
-    attr_accessor :parent
 
     # Constructor
     # @param resources [Array] array of procs with container's beans definitions
@@ -42,12 +41,10 @@ module IocRb
     def self.with_parent(parent_container, &block)
       const_loader           = parent_container.instance_variable_get("@const_loader")
       beans_metadata_storage = parent_container.instance_variable_get("@beans_metadata_storage")
-      bean_factory           = IocRb::BeanFactory.new(const_loader, beans_metadata_storage)
       container              = self.new(const_loader)
       container.instance_eval do
-        @parent                 = parent_container
         @beans_metadata_storage = beans_metadata_storage
-        @bean_factory           = bean_factory
+        @bean_factory           = IocRb::BeanFactory.new(const_loader, beans_metadata_storage)
       end
       block.call(container) if block_given?
       container
@@ -88,12 +85,7 @@ module IocRb
     # @return bean instance
     def [](name)
       IocRb::ArgsValidator.is_symbol!(name, :bean_name)
-      if keys.include?(name)
-        return @bean_factory.get_bean(name)
-      end
-      if parent
-        return parent[name]
-      end
+      return @bean_factory.get_bean(name)
     end
 
     def keys
