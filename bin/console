@@ -1,0 +1,36 @@
+#!/usr/bin/env ruby
+
+require "bundler/setup"
+require "ioc_rb"
+
+
+require "irb"
+IRB.start(__FILE__)
+
+
+class ContactBook
+  inject :contacts_repository
+  inject :validator, ref: :contact_validator
+end
+class ContactBookService
+  inject :contacts_repository
+  inject :validator, ref: :contact_validator
+end
+class ContactsRepository
+end
+class ContactValidator
+end
+class TestContactValidator
+end
+
+parent = IocRb::Container.new do |c|
+  c.bean(:contacts_repository,  class: ContactsRepository)
+  c.bean(:contact_validator,    class: ContactValidator)
+  c.bean(:contact_book,         class: ContactBook)
+  c.bean(:contact_book_service, class: "ContactBookService")
+end
+
+
+testcontainer = IocRb::Container.with_parent(parent) do |c|
+  c.bean(:contact_validator,    class: TestContactValidator)
+end
