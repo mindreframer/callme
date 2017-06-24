@@ -20,4 +20,8 @@ class IocRb::BeansMetadataStorage
   def bean_classes
     @bean_metadatas.values.map(&:bean_class)
   end
+
+  def keys
+    @bean_metadatas.keys
+  end
 end

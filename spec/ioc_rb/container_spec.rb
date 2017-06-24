@@ -168,7 +168,60 @@ describe IocRb::Container do
     it "should instantiate bean using factory method" do
       container[:config].should be_instance_of(Test::Config)
     end
+  end
 
+  describe "parent container" do
+    class ContactBook
+      inject :contacts_repository
+      inject :validator, ref: :contact_validator
+    end
+    class ContactBookService
+      inject :contacts_repository
+      inject :validator, ref: :contact_validator
+    end
+    class ContactsRepository
+    end
+    class ContactValidator
+    end
+    class TestContactValidator
+    end
+
+    class AnotherTestContactValidator
+    end
+
+
+    let(:parent){
+      IocRb::Container.new do |c|
+        c.bean(:contacts_repository,  class: ContactsRepository)
+        c.bean(:contact_validator,    class: ContactValidator)
+        c.bean(:contact_book,         class: ContactBook)
+        c.bean(:contact_book_service, class: "ContactBookService")
+      end
+    }
+
+    let(:container){
+      IocRb::Container.with_parent(parent) do |c|
+        c.bean(:contact_validator,    class: TestContactValidator)
+      end
+    }
+
+    it "works for direct beans" do
+      expect(container[:contact_validator]).to be_a(TestContactValidator)
+      expect(container[:contact_book_service].validator).to be_a(TestContactValidator)
+    end
+
+    it "works for in-direct dependencies" do
+      expect(container[:contact_book_service].validator).to be_a(TestContactValidator)
+    end
+
+    it "does not consider changes to parent" do
+      expect(parent[:contact_book_service].validator).to be_a(ContactValidator)
+      parent.replace_bean(:contact_validator, class: AnotherTestContactValidator)
+      expect(parent[:contact_validator]).to be_a(AnotherTestContactValidator)
+      parent.reset!
+      expect(parent[:contact_book_service].validator).to be_a(AnotherTestContactValidator)
+      expect(container[:contact_book_service].validator).to be_a(TestContactValidator)
+    end
   end
 
 end
