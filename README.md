@@ -1,8 +1,8 @@
-# IocRb [![Build Status](https://travis-ci.org/AlbertGazizov/ioc_rb.png)](https://travis-ci.org/AlbertGazizov/ioc_rb) [![Code Climate](https://codeclimate.com/github/AlbertGazizov/ioc_rb.png)](https://codeclimate.com/github/AlbertGazizov/ioc_rb)
+# Callme [![Build Status](https://travis-ci.org/mindreframer/callme.png)](https://travis-ci.org/mindreframer/callme) [![Code Climate](https://codeclimate.com/github/mindreframer/callme.png)](https://codeclimate.com/github/mindreframer/callme)
 
 
 
-IocRb is an Inversion of Control container for Ruby.
+Callme is an Inversion of Control container for Ruby.
 It takes advantage of the dynamic nature of Ruby to provide a rich and flexible approach to injecting dependencies.
 It's inspired by SpringIoc and tries to give you the same features.
 
@@ -119,7 +119,7 @@ puts third[:contact_book_service].validator.class
 
 Add this line to your application's Gemfile:
 
-    gem 'ioc_rb'
+    gem 'callme'
 
 And then execute:
 
@@ -127,7 +127,7 @@ And then execute:
 
 Or install it yourself as:
 
-    $ gem install ioc_rb
+    $ gem install callme
 
 ## Contributing
 
@@ -143,4 +143,5 @@ Or install it yourself as:
 3. Write documentation with more examples
 
 ## Author
+Roman Heinrich, [@mindreframer](https://twitter.com/mindreframer)
 Albert Gazizov, [@deeper4k](https://twitter.com/deeper4k)
