@@ -97,21 +97,21 @@ parent = IocRb::Container.new do |c|
   c.bean(:contact_book,         class: ContactBook)
   c.bean(:contact_book_service, class: "ContactBookService")
 end
-puts parent[:contact_book_service].inspect
-#=> #<ContactBookService:0x007fe9e18c3bb0 @contacts_repository=#<ContactsRepository:0x007fe9e18c3b38>, @validator=#<ContactValidator:0x007fe9e18c3a98>>
+puts parent[:contact_book_service].validator.class
+#=> ContactValidator
 
 testcontainer = IocRb::Container.with_parent(parent) do |c|
   c.bean(:contact_validator,    class: TestContactValidator)
 end
-puts testcontainer[:contact_book_service].inspect
-#=> #<ContactBookService:0x007fe9e18c30c0 @contacts_repository=#<ContactsRepository:0x007fe9e18c2fd0>, @validator=#<TestContactValidator:0x007fe9e18c2f08>>
+puts testcontainer[:contact_book_service].validator.class
+#=> TestContactValidator
 
 third = IocRb::Container.with_parent(parent) do |c|
   c.bean(:contact_validator,    class: AnotherTestContactValidator)
 end
 
-puts third[:contact_book_service].inspect
-#=> #<ContactBookService:0x007fe9e18c2328 @contacts_repository=#<ContactsRepository:0x007fe9e18c2238>, @validator=#<AnotherTestContactValidator:0x007fe9e18c21c0>>
+puts third[:contact_book_service].validator.class
+#=> AnotherTestContactValidator
 ```
 
 
