@@ -1,4 +1,4 @@
-module IocRb::Errors
+module Callme::Errors
   # Thrown when a service cannot be located by name.
   class MissingBeanError < StandardError; end
 

@@ -1,6 +1,6 @@
 # Stores bean specific data: bean class, name,
 # scope and bean dependencies
-class IocRb::BeanMetadata
+class Callme::BeanMetadata
   attr_reader :name, :bean_class, :scope, :instance, :factory_method, :attrs
 
   # Constructor
@@ -15,7 +15,7 @@ class IocRb::BeanMetadata
   # +some_dependency+ is an attr_accessor defined in the bean class,
   # +ref+ specifies what dependency from container to use to set the attribute
   def initialize(name, options, &block)
-    IocRb::ArgsValidator.has_key!(options, :class)
+    Callme::ArgsValidator.has_key!(options, :class)
 
     @name           = name
     @bean_class     = options[:class]
@@ -35,7 +35,7 @@ class IocRb::BeanMetadata
     if klass.respond_to?(:_iocrb_injectable_attrs)
       klass._iocrb_injectable_attrs.each do |attr, options|
         options[:ref] ||= attr
-        @attrs << IocRb::BeanMetadata::Attribute.new(attr, options)
+        @attrs << Callme::BeanMetadata::Attribute.new(attr, options)
       end
     end
   end
@@ -48,7 +48,7 @@ class IocRb::BeanMetadata
     attr_reader :name, :ref
 
     def initialize(name, options)
-      IocRb::ArgsValidator.has_key!(options, :ref)
+      Callme::ArgsValidator.has_key!(options, :ref)
       @name = name
       @ref  = options[:ref]
     end
@@ -60,11 +60,11 @@ class IocRb::BeanMetadata
     end
 
     def attr(name, options)
-      @attrs << IocRb::BeanMetadata::Attribute.new(name, options)
+      @attrs << Callme::BeanMetadata::Attribute.new(name, options)
     end
 
     def arg(name, options)
-      @args << IocRb::BeanMetadata::Attribute.new(name, options)
+      @args << Callme::BeanMetadata::Attribute.new(name, options)
     end
   end
 end

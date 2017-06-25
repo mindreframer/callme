@@ -1,6 +1,6 @@
 # Singleton scope returns the same bean instance
 # on each call
-class IocRb::Scopes::SingletonScope
+class Callme::Scopes::SingletonScope
 
   # Constructon
   # @param bean_factory bean factory

@@ -1,2 +1,0 @@
-module IocRb::Scopes
-end

@@ -1,0 +1,2 @@
+module Callme::Scopes
+end

@@ -1,6 +1,6 @@
 # Prototype scope instantiates new bean instance
 # on each +get_bean+ call
-class IocRb::Scopes::PrototypeScope
+class Callme::Scopes::PrototypeScope
 
   # Constructon
   # @param bean_factory bean factory

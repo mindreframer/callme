@@ -1,5 +1,5 @@
 # Helper class for arguments validation
-module IocRb::ArgsValidator
+module Callme::ArgsValidator
   class << self
 
     # Checks that specifid +obj+ is a symbol

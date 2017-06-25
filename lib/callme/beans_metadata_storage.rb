@@ -1,5 +1,5 @@
 # Storage of bean metadatas
-class IocRb::BeansMetadataStorage
+class Callme::BeansMetadataStorage
   def initialize(bean_metadatas = {})
     @bean_metadatas = bean_metadatas
   end

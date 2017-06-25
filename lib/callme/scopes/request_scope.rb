@@ -2,7 +2,7 @@ require 'request_store'
 
 # Request scope instantiates new bean instance
 # on each new HTTP request
-class IocRb::Scopes::RequestScope
+class Callme::Scopes::RequestScope
 
   # Constructon
   # @param bean_factory bean factory

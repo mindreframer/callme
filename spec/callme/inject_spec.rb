@@ -1,5 +1,4 @@
 require 'spec_helper'
-require 'ioc_rb'
 
 # Ensures that :inject keyword works as it should
 describe "Object.inject" do
@@ -17,7 +16,7 @@ describe "Object.inject" do
   end
 
   let(:container) do
-    IocRb::Container.new do |c|
+    Callme::Container.new do |c|
       c.bean(:contacts_repository,  class: ContactsRepository)
       c.bean(:contact_validator,    class: ContactValidator)
       c.bean(:contact_book,         class: ContactBook)

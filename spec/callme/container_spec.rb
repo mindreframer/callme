@@ -1,7 +1,7 @@
 require 'spec_helper'
 require 'ioc_rb'
 
-describe IocRb::Container do
+describe Callme::Container do
 
   class Logger
     attr_accessor :appender
@@ -13,7 +13,7 @@ describe IocRb::Container do
 
   describe "bean definitions" do
     let(:container) do
-      container = IocRb::Container.new
+      container = Callme::Container.new
       container.bean(:appender, class: Appender)
       container.bean(:logger, class: Logger) do
         attr :appender, ref: :appender
@@ -35,7 +35,7 @@ describe IocRb::Container do
 
   describe "eager_load_bean_classes" do
     let(:container) do
-      container = IocRb::Container.new
+      container = Callme::Container.new
       container.bean(:appender, class: 'Appender')
       container.bean(:logger, class: 'Logger') do
         attr :appender, ref: :appender
@@ -52,7 +52,7 @@ describe IocRb::Container do
 
   describe "#replace_bean" do
     it "should replace bean definition" do
-      container = IocRb::Container.new
+      container = Callme::Container.new
       container.bean(:appender, class: Appender)
       container[:appender].should be_a(Appender)
 
@@ -72,7 +72,7 @@ describe IocRb::Container do
     end
 
     it "should instanciate given bean definitions" do
-      container = IocRb::Container.new_with_beans([resource])
+      container = Callme::Container.new_with_beans([resource])
       container[:logger].should be_a(Logger)
       container[:appender].should be_a(Appender)
     end
@@ -99,7 +99,7 @@ describe IocRb::Container do
     end
 
     let(:container) do
-      IocRb::Container.new do |c|
+      Callme::Container.new do |c|
         c.bean(:circle,              class: Circle)
         c.bean(:rectangle,           class: Rectangle)
         c.bean(:validator,           class: Validator)
@@ -125,7 +125,7 @@ describe IocRb::Container do
     end
 
     let(:container) do
-      container = IocRb::Container.new
+      container = Callme::Container.new
       container.bean(:contacts_repository, class: ContactsRepository, scope: :request)
       container.bean(:contacts_service,    class: ContactsService,    scope: :singleton)
       container.bean(:contacts_validator,  class: ContactsValidator,  scope: :prototype)
@@ -160,7 +160,7 @@ describe IocRb::Container do
     end
 
     let(:container) do
-      IocRb::Container.new do |c|
+      Callme::Container.new do |c|
         c.bean :config, class: Test::ConfigsFactory, factory_method: :load_config
       end
     end
@@ -191,7 +191,7 @@ describe IocRb::Container do
 
 
     let(:parent){
-      IocRb::Container.new do |c|
+      Callme::Container.new do |c|
         c.bean(:contacts_repository,  class: ContactsRepository)
         c.bean(:contact_validator,    class: ContactValidator)
         c.bean(:contact_book,         class: ContactBook)
@@ -200,7 +200,7 @@ describe IocRb::Container do
     }
 
     let(:container){
-      IocRb::Container.with_parent(parent) do |c|
+      Callme::Container.with_parent(parent) do |c|
         c.bean(:contact_validator,    class: TestContactValidator)
       end
     }

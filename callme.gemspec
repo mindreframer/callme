@@ -1,16 +1,16 @@
 # coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'ioc_rb/version'
+require 'callme/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = "ioc_rb"
-  spec.version       = IocRb::VERSION
-  spec.authors       = ["Albert Gazizov"]
-  spec.email         = ["deeper4k@gmail.com"]
-  spec.description   = %q{Inversion of Controll Container}
-  spec.summary       = %q{Inversion of Controll Container}
-  spec.homepage      = "http://github.com/deeper4k/ioc_rb"
+  spec.name          = "callme"
+  spec.version       = Callme::VERSION
+  spec.authors       = ["Roman Heinrich", "Albert Gazizov"]
+  spec.email         = ["roman.heinrich@gmail.com"]
+  spec.description   = %q{Callme: Simple depencency injection lib}
+  spec.summary       = %q{Callme: Simple depencency injection lib}
+  spec.homepage      = "http://github.com/mindreframer/callme"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files`.split($/)

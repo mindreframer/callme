@@ -1,10 +1,10 @@
-require 'ioc_rb/scopes'
-require 'ioc_rb/scopes/singleton_scope'
-require 'ioc_rb/scopes/prototype_scope'
-require 'ioc_rb/scopes/request_scope'
+require 'callme/scopes'
+require 'callme/scopes/singleton_scope'
+require 'callme/scopes/prototype_scope'
+require 'callme/scopes/request_scope'
 
 # Instantiates beans according to their scopes
-class IocRb::BeanFactory
+class Callme::BeanFactory
   attr_reader :const_loader
 
   # Constructor
@@ -12,9 +12,9 @@ class IocRb::BeanFactory
   def initialize(const_loader, beans_metadata_storage)
     @const_loader           = const_loader
     @beans_metadata_storage = beans_metadata_storage
-    @singleton_scope        = IocRb::Scopes::SingletonScope.new(self)
-    @prototype_scope        = IocRb::Scopes::PrototypeScope.new(self)
-    @request_scope          = IocRb::Scopes::RequestScope.new(self)
+    @singleton_scope        = Callme::Scopes::SingletonScope.new(self)
+    @prototype_scope        = Callme::Scopes::PrototypeScope.new(self)
+    @request_scope          = Callme::Scopes::RequestScope.new(self)
   end
 
   # Get bean from the container by it's +name+.
@@ -26,7 +26,7 @@ class IocRb::BeanFactory
   def get_bean(name)
     bean_metadata = @beans_metadata_storage.by_name(name)
     unless bean_metadata
-      raise IocRb::Errors::MissingBeanError, "Bean with name :#{name} is not defined"
+      raise Callme::Errors::MissingBeanError, "Bean with name :#{name} is not defined"
     end
     get_bean_with_metadata(bean_metadata)
   end
@@ -70,7 +70,7 @@ class IocRb::BeanFactory
   def delete_bean(name)
     bean_metadata = @beans_metadata_storage.by_name(name)
     unless bean_metadata
-      raise IocRb::Errors::MissingBeanError, "Bean with name :#{name} is not defined"
+      raise Callme::Errors::MissingBeanError, "Bean with name :#{name} is not defined"
     end
     get_scope_by_metadata(bean_metadata).delete_bean(bean_metadata)
   end
@@ -81,7 +81,7 @@ class IocRb::BeanFactory
     bean_metadata.attrs.each do |attr|
       bean_metadata = @beans_metadata_storage.by_name(attr.ref)
       unless bean_metadata
-        raise IocRb::Errors::MissingBeanError, "Bean with name :#{attr.ref} is not defined, check #{bean.class}"
+        raise Callme::Errors::MissingBeanError, "Bean with name :#{attr.ref} is not defined, check #{bean.class}"
       end
       case bean_metadata.scope
       when :singleton
@@ -109,8 +109,7 @@ class IocRb::BeanFactory
     when :request
       @request_scope
     else
-      raise IocRb::Errors::UnsupportedScopeError, "Bean with name :#{bean_metadata.name} has unsupported scope :#{bean_metadata.scope}"
+      raise Callme::Errors::UnsupportedScopeError, "Bean with name :#{bean_metadata.name} has unsupported scope :#{bean_metadata.scope}"
     end
   end
-
 end

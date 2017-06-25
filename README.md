@@ -30,9 +30,9 @@ logger.info('some message')
 ```
 
 IocRb eliminates the manual injection step and injects dependencies by itself.
-To use it you need to instantiate IocRb::Container and pass dependency definitions(we call them beans) to it:
+To use it you need to instantiate Callme::Container and pass dependency definitions(we call them beans) to it:
 ```ruby
-container = IocRb::Container.new do |c|
+container = Callme::Container.new do |c|
   c.bean(:appender, class: Appender)
   c.bean(:logger, class: Logger) do
     attr :appender, ref: :appender
@@ -60,7 +60,7 @@ end
 ```
 With `inject` keyword you won't need to specify class dependencies in bean definition:
 ```ruby
-container = IocRb::Container.new do |c|
+container = Callme::Container.new do |c|
   c.bean(:appender, class: Appender)
   c.bean(:logger, class: Logger)
 end
@@ -69,7 +69,7 @@ end
 
 
 ## Inheriting from other containers
-Quite often you will want to selectively override some parts of the system, use `IocRb::Container.with_parent` to
+Quite often you will want to selectively override some parts of the system, use `Callme::Container.with_parent` to
 create a new container with all the beans copied from the parent container.
 
 ```ruby
@@ -91,7 +91,7 @@ end
 class AnotherTestContactValidator
 end
 
-parent = IocRb::Container.new do |c|
+parent = Callme::Container.new do |c|
   c.bean(:contacts_repository,  class: ContactsRepository)
   c.bean(:contact_validator,    class: ContactValidator)
   c.bean(:contact_book,         class: ContactBook)
@@ -100,13 +100,13 @@ end
 puts parent[:contact_book_service].validator.class
 #=> ContactValidator
 
-testcontainer = IocRb::Container.with_parent(parent) do |c|
+testcontainer = Callme::Container.with_parent(parent) do |c|
   c.bean(:contact_validator,    class: TestContactValidator)
 end
 puts testcontainer[:contact_book_service].validator.class
 #=> TestContactValidator
 
-third = IocRb::Container.with_parent(parent) do |c|
+third = Callme::Container.with_parent(parent) do |c|
   c.bean(:contact_validator,    class: AnotherTestContactValidator)
 end
 

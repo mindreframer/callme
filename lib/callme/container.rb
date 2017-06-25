@@ -1,26 +1,26 @@
-require 'ioc_rb/errors'
-require 'ioc_rb/args_validator'
-require 'ioc_rb/bean_metadata'
-require 'ioc_rb/beans_metadata_storage'
-require 'ioc_rb/bean_factory'
-require 'ioc_rb/const_loaders/native'
+require 'callme/errors'
+require 'callme/args_validator'
+require 'callme/bean_metadata'
+require 'callme/beans_metadata_storage'
+require 'callme/bean_factory'
+require 'callme/const_loaders/native'
 
-module IocRb
+module Callme
 
-  # IocRb::Container is the central data store for registering objects
+  # Callme::Container is the central data store for registering objects
   # used for dependency injection. Users register classes by
   # providing a name and a class to create the object(we call them beans). Beans
   # may be retrieved by asking for them by name (via the [] operator)
   class Container
-    DEFAULT_CONST_LOADER = IocRb::ConstLoaders::Native
+    DEFAULT_CONST_LOADER = Callme::ConstLoaders::Native
 
     # Constructor
     # @param resources [Array] array of procs with container's beans definitions
     # @param &block [Proc] optional proc with container's beans definitions
     def initialize(const_loader = DEFAULT_CONST_LOADER, &block)
       @const_loader           = const_loader
-      @beans_metadata_storage = IocRb::BeansMetadataStorage.new
-      @bean_factory           = IocRb::BeanFactory.new(const_loader, @beans_metadata_storage)
+      @beans_metadata_storage = Callme::BeansMetadataStorage.new
+      @bean_factory           = Callme::BeanFactory.new(const_loader, @beans_metadata_storage)
 
       block.call(self) if block_given?
     end
@@ -29,7 +29,7 @@ module IocRb
     # what adds new bean definitions to the container
     # @param resources [Array] array of procs with container's beans definitions
     def self.new_with_beans(resources, const_loader = DEFAULT_CONST_LOADER)
-      IocRb::ArgsValidator.is_array!(resources, :resources)
+      Callme::ArgsValidator.is_array!(resources, :resources)
 
       self.new(const_loader).tap do |container|
         resources.each do |resource|
@@ -44,7 +44,7 @@ module IocRb
       container              = self.new(const_loader)
       container.instance_eval do
         @beans_metadata_storage = beans_metadata_storage
-        @bean_factory           = IocRb::BeanFactory.new(const_loader, beans_metadata_storage)
+        @bean_factory           = Callme::BeanFactory.new(const_loader, beans_metadata_storage)
       end
       block.call(container) if block_given?
       container
@@ -56,10 +56,10 @@ module IocRb
     # @param &block [Proc] the block  which describes bean dependencies,
     #                      see more in the BeanMetadata
     def bean(bean_name, options, &block)
-      IocRb::ArgsValidator.is_symbol!(bean_name, :bean_name)
-      IocRb::ArgsValidator.is_hash!(options, :options)
+      Callme::ArgsValidator.is_symbol!(bean_name, :bean_name)
+      Callme::ArgsValidator.is_hash!(options, :options)
 
-      bean = IocRb::BeanMetadata.new(bean_name, options, &block)
+      bean = Callme::BeanMetadata.new(bean_name, options, &block)
       @beans_metadata_storage.put(bean)
     end
 
@@ -76,7 +76,7 @@ module IocRb
     end
 
     def reset!
-      @bean_factory = IocRb::BeanFactory.new(@const_loader, @beans_metadata_storage)
+      @bean_factory = Callme::BeanFactory.new(@const_loader, @beans_metadata_storage)
     end
 
     # Returns bean instance from the container
@@ -84,7 +84,7 @@ module IocRb
     # @param name [Symbol] bean name
     # @return bean instance
     def [](name)
-      IocRb::ArgsValidator.is_symbol!(name, :bean_name)
+      Callme::ArgsValidator.is_symbol!(name, :bean_name)
       return @bean_factory.get_bean(name)
     end
 
