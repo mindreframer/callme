@@ -1,5 +1,5 @@
 require 'spec_helper'
-require 'ioc_rb'
+require 'callme'
 
 describe Callme::Container do
 

@@ -29,7 +29,7 @@ logger.appender = Appender.new
 logger.info('some message')
 ```
 
-IocRb eliminates the manual injection step and injects dependencies by itself.
+Callme eliminates the manual injection step and injects dependencies by itself.
 To use it you need to instantiate Callme::Container and pass dependency definitions(we call them beans) to it:
 ```ruby
 container = Callme::Container.new do |c|
@@ -45,7 +45,7 @@ logger = container[:logger]
 logger.info('some message')
 ```
 
-To simplify injection IocRb allows you specify dependencies inside of your class:
+To simplify injection Callme allows you specify dependencies inside of your class:
 ```ruby
 class Logger
   inject :appender
@@ -139,7 +139,7 @@ Or install it yourself as:
 
 # TODO
 1. Constructor based injection
-2. Scope registration, refactor BeanFactory. IocRb:Container.register_scope(SomeScope)
+2. Scope registration, refactor BeanFactory. Callme:Container.register_scope(SomeScope)
 3. Write documentation with more examples
 
 ## Author

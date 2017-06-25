@@ -32,8 +32,8 @@ class Callme::BeanMetadata
   end
 
   def fetch_attrs!(klass)
-    if klass.respond_to?(:_iocrb_injectable_attrs)
-      klass._iocrb_injectable_attrs.each do |attr, options|
+    if klass.respond_to?(:_callme_injectable_attrs)
+      klass._callme_injectable_attrs.each do |attr, options|
         options[:ref] ||= attr
         @attrs << Callme::BeanMetadata::Attribute.new(attr, options)
       end

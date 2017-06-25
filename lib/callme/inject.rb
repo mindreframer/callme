@@ -21,12 +21,12 @@ class Object
       unless options.is_a?(Hash)
         raise ArgumentError, "second argument for inject method should be a Hash"
       end
-      unless respond_to?(:_iocrb_injectable_attrs)
-        class_attribute :_iocrb_injectable_attrs
-        self._iocrb_injectable_attrs = { dependency_name => options.dup }
+      unless respond_to?(:_callme_injectable_attrs)
+        class_attribute :_callme_injectable_attrs
+        self._callme_injectable_attrs = { dependency_name => options.dup }
       else
-        self._iocrb_injectable_attrs =
-          self._iocrb_injectable_attrs.merge(dependency_name => options.dup)
+        self._callme_injectable_attrs =
+          self._callme_injectable_attrs.merge(dependency_name => options.dup)
       end
       attr_accessor dependency_name
     end

@@ -87,14 +87,14 @@ class Callme::BeanFactory
       when :singleton
         bean.send("#{attr.name}=", get_bean(attr.ref))
       when :prototype
-        bean.instance_variable_set(:@_ioc_rb_bean_factory, self)
+        bean.instance_variable_set(:@_callme_bean_factory, self)
         bean.define_singleton_method(attr.name) do
-          @_ioc_rb_bean_factory.get_bean(attr.ref)
+          @_callme_bean_factory.get_bean(attr.ref)
         end
       when :request
-        bean.instance_variable_set(:@_ioc_rb_bean_factory, self)
+        bean.instance_variable_set(:@_callme_bean_factory, self)
         bean.define_singleton_method(attr.name) do
-          @_ioc_rb_bean_factory.get_bean(attr.ref)
+          @_callme_bean_factory.get_bean(attr.ref)
         end
       end
     end
