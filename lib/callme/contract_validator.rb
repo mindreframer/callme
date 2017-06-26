@@ -18,15 +18,18 @@ module Callme
         })
       end
 
-      #loop through each contract method
-      contract_methods.each do |method|
+      validate_methods(dependency_class, contract_class, contract_methods)
+    end
 
-        #get the contract method parameters
+    private
+
+    def validate_methods(dependency_class, contract_class, contract_methods)
+      contract_methods.each do |method|
+        #contract method parameters
         cmp = contract_class.instance_method(method).parameters
-        #get teh dependency method parameters
+        #dependency method parameters
         dmp = dependency_class.instance_method(method).parameters
 
-        #check if the parameters match for both methods
         if cmp != dmp
           raise Callme::Errors::DependencyContractInvalidParametersException.new(method, cmp)
         end
