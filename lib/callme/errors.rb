@@ -7,4 +7,18 @@ module Callme::Errors
 
   # Thrown when an unsupported dep scope is specified.
   class UnsupportedScopeError < StandardError; end
+
+  class DependencyContractMissingMethodsException < StandardError; end
+
+  class DependencyContractInvalidParametersException < StandardError
+    def initialize(method, parameters)
+      @method = method
+      @parameters = parameters
+    end
+
+    def to_s
+      parameter_names = @parameters.join(', ')
+      "The method signature of method: '#{@method}' does not match the contract parameters: '#{parameter_names}'"
+    end
+  end
 end

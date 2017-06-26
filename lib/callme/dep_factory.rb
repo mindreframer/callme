@@ -46,6 +46,11 @@ class Callme::DepFactory
       dep_metadata.fetch_attrs!(dep_class)
     end
     dep = dep_metadata.instance ? dep_class.new : dep_class
+
+    if dep_metadata.has_contract?
+      contract_validator.validate(dep_class, dep_metadata.contract, const_loader)
+    end
+
     if dep_metadata.has_factory_method?
       set_dep_dependencies(dep, dep_metadata)
       dep = dep.send(dep_metadata.factory_method)
@@ -106,5 +111,9 @@ class Callme::DepFactory
     else
       raise Callme::Errors::UnsupportedScopeError, "Dep with name :#{dep_metadata.name} has unsupported scope :#{dep_metadata.scope}"
     end
+  end
+
+  def contract_validator
+    Callme::ContractValidator.new
   end
 end
