@@ -7,9 +7,7 @@ class Callme::DepFactory
   def initialize(const_loader, deps_metadata_storage)
     @const_loader           = const_loader
     @deps_metadata_storage  = deps_metadata_storage
-    @singleton_scope        = Callme::Scopes::SingletonScope.new(self)
-    @prototype_scope        = Callme::Scopes::PrototypeScope.new(self)
-    @request_scope          = Callme::Scopes::RequestScope.new(self)
+    init_scopes
   end
 
   # Get dep from the container by it's +name+.
@@ -101,19 +99,21 @@ class Callme::DepFactory
   end
 
   def get_scope_by_metadata(dep_metadata)
-    case dep_metadata.scope
-    when :singleton
-      @singleton_scope
-    when :prototype
-      @prototype_scope
-    when :request
-      @request_scope
-    else
-      raise Callme::Errors::UnsupportedScopeError, "Dep with name :#{dep_metadata.name} has unsupported scope :#{dep_metadata.scope}"
-    end
+    @scopes[dep_metadata.scope] ||
+      raise(
+        Callme::Errors::UnsupportedScopeError,
+        "Dep with name :#{dep_metadata.name} has unsupported scope :#{dep_metadata.scope}")
   end
 
   def contract_validator
     Callme::ContractValidator.new
+  end
+
+  def init_scopes
+    @scopes = {
+      singleton: Callme::Scopes::SingletonScope.new(self),
+      prototype: Callme::Scopes::PrototypeScope.new(self),
+      request:   Callme::Scopes::RequestScope.new(self)
+    }
   end
 end
