@@ -1,30 +1,30 @@
-# Stores bean specific data: bean class, name,
-# scope and bean dependencies
+# Stores dep specific data: dep class, name,
+# scope and dep dependencies
 class Callme::BeanMetadata
-  attr_reader :name, :bean_class, :scope, :instance, :factory_method, :attrs
+  attr_reader :name, :dep_class, :scope, :instance, :factory_method, :attrs
 
   # Constructor
-  # @param name [Symbol] bean name
-  # @params options [Hash] includes bean class and scope
-  # @params &block [Proc] bean dependencies, has the following structure:
+  # @param name [Symbol] dep name
+  # @params options [Hash] includes dep class and scope
+  # @params &block [Proc] dep dependencies, has the following structure:
   #   do |c|
   #     attr :some_dependency, ref: :dependency_name
   #     arg  :another_dependency, ref: :another_dependency_name
   #   end
   # here attr means setter injection, arg means constructon injects
-  # +some_dependency+ is an attr_accessor defined in the bean class,
+  # +some_dependency+ is an attr_accessor defined in the dep class,
   # +ref+ specifies what dependency from container to use to set the attribute
   def initialize(name, options, &block)
     Callme::ArgsValidator.has_key!(options, :class)
 
     @name           = name
-    @bean_class     = options[:class]
+    @dep_class     = options[:class]
     @scope          = options[:scope] || :singleton
     @instance       = options[:instance].nil? ? true : options[:instance]
     @factory_method = options[:factory_method]
     @attrs          = []
 
-    fetch_attrs!(@bean_class)
+    fetch_attrs!(@dep_class)
 
     if block
       Dsl.new(@attrs).instance_exec(&block)

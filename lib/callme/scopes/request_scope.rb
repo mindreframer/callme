@@ -1,33 +1,33 @@
 require 'request_store'
 
-# Request scope instantiates new bean instance
+# Request scope instantiates new dep instance
 # on each new HTTP request
 class Callme::Scopes::RequestScope
 
   # Constructon
-  # @param bean_factory bean factory
-  def initialize(bean_factory)
-    @bean_factory = bean_factory
+  # @param dep_factory dep factory
+  def initialize(dep_factory)
+    @dep_factory = dep_factory
   end
 
-  # Returns a bean from the +RequestStore+
+  # Returns a dep from the +RequestStore+
   # RequestStore is a wrapper for Thread.current
   # which clears it on each new HTTP request
   #
-  # @param bean_metadata [BeanMetadata] bean metadata
-  # @returns bean instance
-  def get_bean(bean_metadata)
-    RequestStore.store[:_callme_beans] ||= {}
-    if bean = RequestStore.store[:_callme_beans][bean_metadata.name]
-      bean
+  # @param dep_metadata [BeanMetadata] dep metadata
+  # @returns dep instance
+  def get_dep(dep_metadata)
+    RequestStore.store[:_callme_deps] ||= {}
+    if dep = RequestStore.store[:_callme_deps][dep_metadata.name]
+      dep
     else
-     @bean_factory.create_bean_and_save(bean_metadata, RequestStore.store[:_callme_beans])
+     @dep_factory.create_dep_and_save(dep_metadata, RequestStore.store[:_callme_deps])
     end
   end
 
-  # Delete bean from scope
-  # @param bean_metadata [BeanMetadata] bean metadata
-  def delete_bean(bean_metadata)
-    RequestStore.store[:_callme_beans].delete(bean_metadata.name)
+  # Delete dep from scope
+  # @param dep_metadata [BeanMetadata] dep metadata
+  def delete_dep(dep_metadata)
+    RequestStore.store[:_callme_deps].delete(dep_metadata.name)
   end
 end

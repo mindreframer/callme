@@ -17,10 +17,10 @@ describe "Object.inject" do
 
   let(:container) do
     Callme::Container.new do |c|
-      c.bean(:contacts_repository,  class: ContactsRepository)
-      c.bean(:contact_validator,    class: ContactValidator)
-      c.bean(:contact_book,         class: ContactBook)
-      c.bean(:contact_book_service, class: "ContactBookService")
+      c.dep(:contacts_repository,  class: ContactsRepository)
+      c.dep(:contact_validator,    class: ContactValidator)
+      c.dep(:contact_book,         class: ContactBook)
+      c.dep(:contact_book_service, class: "ContactBookService")
     end
   end
 

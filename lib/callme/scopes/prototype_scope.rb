@@ -1,25 +1,25 @@
-# Prototype scope instantiates new bean instance
-# on each +get_bean+ call
+# Prototype scope instantiates new dep instance
+# on each +get_dep+ call
 class Callme::Scopes::PrototypeScope
 
   # Constructon
-  # @param bean_factory bean factory
-  def initialize(bean_factory)
-    @bean_factory = bean_factory
+  # @param dep_factory dep factory
+  def initialize(dep_factory)
+    @dep_factory = dep_factory
   end
 
-  # Get new bean instance
-  # @param bean_metadata [BeanMetadata] bean metadata
-  # @returns bean instance
-  def get_bean(bean_metadata)
-    @bean_factory.create_bean_and_save(bean_metadata, {})
+  # Get new dep instance
+  # @param dep_metadata [BeanMetadata] dep metadata
+  # @returns dep instance
+  def get_dep(dep_metadata)
+    @dep_factory.create_dep_and_save(dep_metadata, {})
   end
 
-  # Delete bean from scope,
-  # because Prototype scope doesn't store bean
+  # Delete dep from scope,
+  # because Prototype scope doesn't store dep
   # then do nothing here
   #
-  # @param bean_metadata [BeanMetadata] bean metadata
-  def delete_bean(bean_metadata)
+  # @param dep_metadata [BeanMetadata] dep metadata
+  def delete_dep(dep_metadata)
   end
 end

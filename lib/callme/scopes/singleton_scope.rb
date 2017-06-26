@@ -1,29 +1,29 @@
-# Singleton scope returns the same bean instance
+# Singleton scope returns the same dep instance
 # on each call
 class Callme::Scopes::SingletonScope
 
   # Constructon
-  # @param bean_factory bean factory
-  def initialize(bean_factory)
-    @beans = {}
-    @bean_factory = bean_factory
+  # @param dep_factory dep factory
+  def initialize(dep_factory)
+    @deps = {}
+    @dep_factory = dep_factory
   end
 
-  # Returns the same bean instance
+  # Returns the same dep instance
   # on each call
-  # @param bean_metadata [BeanMetadata] bean metadata
-  # @returns bean instance
-  def get_bean(bean_metadata)
-    if bean = @beans[bean_metadata.name]
-      bean
+  # @param dep_metadata [BeanMetadata] dep metadata
+  # @returns dep instance
+  def get_dep(dep_metadata)
+    if dep = @deps[dep_metadata.name]
+      dep
     else
-      @bean_factory.create_bean_and_save(bean_metadata, @beans)
+      @dep_factory.create_dep_and_save(dep_metadata, @deps)
     end
   end
 
-  # Delete bean from scope
-  # @param bean_metadata [BeanMetadata] bean metadata
-  def delete_bean(bean_metadata)
-    @beans.delete(bean_metadata.name)
+  # Delete dep from scope
+  # @param dep_metadata [BeanMetadata] dep metadata
+  def delete_dep(dep_metadata)
+    @deps.delete(dep_metadata.name)
   end
 end

@@ -11,17 +11,17 @@ describe Callme::Container do
   class Printer
   end
 
-  describe "bean definitions" do
+  describe "dep definitions" do
     let(:container) do
       container = Callme::Container.new
-      container.bean(:appender, class: Appender)
-      container.bean(:logger, class: Logger) do
+      container.dep(:appender, class: Appender)
+      container.dep(:logger, class: Logger) do
         attr :appender, ref: :appender
       end
-      container.bean(:printer, class: Printer, instance: false)
+      container.dep(:printer, class: Printer, instance: false)
       container
     end
-    it "should instanciate bean and it's dependencies" do
+    it "should instanciate dep and it's dependencies" do
       container[:logger].should be_a(Logger)
       container[:logger].appender.should be_a(Appender)
       container[:printer].should be(Printer)
@@ -33,46 +33,46 @@ describe Callme::Container do
     end
   end
 
-  describe "eager_load_bean_classes" do
+  describe "eager_load_dep_classes" do
     let(:container) do
       container = Callme::Container.new
-      container.bean(:appender, class: 'Appender')
-      container.bean(:logger, class: 'Logger') do
+      container.dep(:appender, class: 'Appender')
+      container.dep(:logger, class: 'Logger') do
         attr :appender, ref: :appender
       end
-      container.bean(:printer, class: 'Printer', instance: false)
+      container.dep(:printer, class: 'Printer', instance: false)
       container
     end
 
-    it "should eager load bean classes" do
-      container.eager_load_bean_classes
+    it "should eager load dep classes" do
+      container.eager_load_dep_classes
     end
   end
 
 
-  describe "#replace_bean" do
-    it "should replace bean definition" do
+  describe "#replace_dep" do
+    it "should replace dep definition" do
       container = Callme::Container.new
-      container.bean(:appender, class: Appender)
+      container.dep(:appender, class: Appender)
       container[:appender].should be_a(Appender)
 
-      container.replace_bean(:appender, class: Logger)
+      container.replace_dep(:appender, class: Logger)
       container[:appender].should be_a(Logger)
     end
   end
 
-  describe "passing bean definitions to container constructor" do
+  describe "passing dep definitions to container constructor" do
     let(:resource) do
       Proc.new do |c|
-        c.bean(:appender, class: 'Appender')
-        c.bean(:logger, class: Logger) do
+        c.dep(:appender, class: 'Appender')
+        c.dep(:logger, class: Logger) do
           attr :appender, ref: :appender
         end
       end
     end
 
-    it "should instanciate given bean definitions" do
-      container = Callme::Container.new_with_beans([resource])
+    it "should instanciate given dep definitions" do
+      container = Callme::Container.new_with_deps([resource])
       container[:logger].should be_a(Logger)
       container[:appender].should be_a(Appender)
     end
@@ -100,11 +100,11 @@ describe Callme::Container do
 
     let(:container) do
       Callme::Container.new do |c|
-        c.bean(:circle,              class: Circle)
-        c.bean(:rectangle,           class: Rectangle)
-        c.bean(:validator,           class: Validator)
-        c.bean(:circle_validator,    class: CircleValidator)
-        c.bean(:rectangle_validator, class: RectangleValidator)
+        c.dep(:circle,              class: Circle)
+        c.dep(:rectangle,           class: Rectangle)
+        c.dep(:validator,           class: Validator)
+        c.dep(:circle_validator,    class: CircleValidator)
+        c.dep(:rectangle_validator, class: RectangleValidator)
       end
     end
 
@@ -114,7 +114,7 @@ describe Callme::Container do
     end
   end
 
-  describe "bean scopes" do
+  describe "dep scopes" do
     class ContactsService
       inject :contacts_repository
       inject :contacts_validator
@@ -126,13 +126,13 @@ describe Callme::Container do
 
     let(:container) do
       container = Callme::Container.new
-      container.bean(:contacts_repository, class: ContactsRepository, scope: :request)
-      container.bean(:contacts_service,    class: ContactsService,    scope: :singleton)
-      container.bean(:contacts_validator,  class: ContactsValidator,  scope: :prototype)
+      container.dep(:contacts_repository, class: ContactsRepository, scope: :request)
+      container.dep(:contacts_service,    class: ContactsService,    scope: :singleton)
+      container.dep(:contacts_validator,  class: ContactsValidator,  scope: :prototype)
       container
     end
 
-    it "should instanciate bean with :request scope on each request" do
+    it "should instanciate dep with :request scope on each request" do
       first_repo  = container[:contacts_service].contacts_repository
       second_repo = container[:contacts_service].contacts_repository
       first_repo.should == second_repo
@@ -141,7 +141,7 @@ describe Callme::Container do
       first_repo.should_not == third_repo
     end
 
-    it "should instanciate bean with :prototype scope on each call" do
+    it "should instanciate dep with :prototype scope on each call" do
       first_validator  = container[:contacts_service].contacts_validator
       second_validator = container[:contacts_service].contacts_validator
       first_validator.should_not == second_validator
@@ -161,11 +161,11 @@ describe Callme::Container do
 
     let(:container) do
       Callme::Container.new do |c|
-        c.bean :config, class: Test::ConfigsFactory, factory_method: :load_config
+        c.dep :config, class: Test::ConfigsFactory, factory_method: :load_config
       end
     end
 
-    it "should instantiate bean using factory method" do
+    it "should instantiate dep using factory method" do
       container[:config].should be_instance_of(Test::Config)
     end
   end
@@ -192,20 +192,20 @@ describe Callme::Container do
 
     let(:parent){
       Callme::Container.new do |c|
-        c.bean(:contacts_repository,  class: ContactsRepository)
-        c.bean(:contact_validator,    class: ContactValidator)
-        c.bean(:contact_book,         class: ContactBook)
-        c.bean(:contact_book_service, class: "ContactBookService")
+        c.dep(:contacts_repository,  class: ContactsRepository)
+        c.dep(:contact_validator,    class: ContactValidator)
+        c.dep(:contact_book,         class: ContactBook)
+        c.dep(:contact_book_service, class: "ContactBookService")
       end
     }
 
     let(:container){
       Callme::Container.with_parent(parent) do |c|
-        c.bean(:contact_validator,    class: TestContactValidator)
+        c.dep(:contact_validator,    class: TestContactValidator)
       end
     }
 
-    it "works for direct beans" do
+    it "works for direct deps" do
       expect(container[:contact_validator]).to be_a(TestContactValidator)
       expect(container[:contact_book_service].validator).to be_a(TestContactValidator)
     end
@@ -216,7 +216,7 @@ describe Callme::Container do
 
     it "does not consider changes to parent" do
       expect(parent[:contact_book_service].validator).to be_a(ContactValidator)
-      parent.replace_bean(:contact_validator, class: AnotherTestContactValidator)
+      parent.replace_dep(:contact_validator, class: AnotherTestContactValidator)
       expect(parent[:contact_validator]).to be_a(AnotherTestContactValidator)
       parent.reset!
       expect(parent[:contact_book_service].validator).to be_a(AnotherTestContactValidator)
@@ -225,7 +225,7 @@ describe Callme::Container do
 
     it "changes in child container do not affect parent container" do
       expect(parent[:contact_book_service].validator).to be_a(ContactValidator)
-      container.replace_bean(:contact_validator, class: AnotherTestContactValidator)
+      container.replace_dep(:contact_validator, class: AnotherTestContactValidator)
       parent.reset!
       container.reset!
       expect(parent[:contact_validator]).to be_a(ContactValidator)
