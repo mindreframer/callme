@@ -3,10 +3,12 @@ require 'spec_helper'
 # Ensures that :inject keyword works as it should
 describe "Object.inject" do
   class ContactBook
+    include Callme::Inject
     inject :contacts_repository
     inject :validator, ref: :contact_validator
   end
   class ContactBookService
+    include Callme::Inject
     inject :contacts_repository
     inject :validator, ref: :contact_validator
   end
@@ -37,6 +39,7 @@ describe "Object.inject" do
   it "should raise ArgumentError if non-symbol passed as dependency name" do
     expect do
       class SomeClass
+        include Callme::Inject
         inject 'bar'
       end
     end.to raise_error(ArgumentError, "dependency name should be a symbol")

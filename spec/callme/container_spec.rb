@@ -81,6 +81,7 @@ describe Callme::Container do
 
   describe "inheritance" do
     class Form
+      include Callme::Inject
       inject :validator
     end
 
@@ -116,6 +117,7 @@ describe Callme::Container do
 
   describe "dep scopes" do
     class ContactsService
+      include Callme::Inject
       inject :contacts_repository
       inject :contacts_validator
     end
@@ -172,10 +174,12 @@ describe Callme::Container do
 
   describe "parent container" do
     class ContactBook
+      include Callme::Inject
       inject :contacts_repository
       inject :validator, ref: :contact_validator
     end
     class ContactBookService
+      include Callme::Inject
       inject :contacts_repository
       inject :validator, ref: :contact_validator
     end
