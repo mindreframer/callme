@@ -1,10 +1,3 @@
-require 'callme/errors'
-require 'callme/args_validator'
-require 'callme/dep_metadata'
-require 'callme/deps_metadata_storage'
-require 'callme/dep_factory'
-require 'callme/const_loaders/native'
-
 module Callme
 
   # Callme::Container is the central data store for registering objects
@@ -18,7 +11,7 @@ module Callme
     # @param resources [Array] array of procs with container's deps definitions
     # @param &block [Proc] optional proc with container's deps definitions
     def initialize(const_loader = DEFAULT_CONST_LOADER, &block)
-      @const_loader           = const_loader
+      @const_loader          = const_loader
       @deps_metadata_storage = Callme::DepsMetadataStorage.new
       @dep_factory           = Callme::DepFactory.new(const_loader, @deps_metadata_storage)
 
@@ -39,9 +32,9 @@ module Callme
     end
 
     def self.with_parent(parent_container, &block)
-      const_loader           = parent_container.instance_variable_get("@const_loader")
+      const_loader          = parent_container.instance_variable_get("@const_loader")
       deps_metadata_storage = parent_container.instance_variable_get("@deps_metadata_storage").copy
-      container              = self.new(const_loader)
+      container             = self.new(const_loader)
       container.instance_eval do
         @deps_metadata_storage = deps_metadata_storage
         @dep_factory           = Callme::DepFactory.new(const_loader, deps_metadata_storage)
@@ -102,6 +95,5 @@ module Callme
         end
       end
     end
-
   end
 end

@@ -1,8 +1,3 @@
-require 'callme/scopes'
-require 'callme/scopes/singleton_scope'
-require 'callme/scopes/prototype_scope'
-require 'callme/scopes/request_scope'
-
 # Instantiates deps according to their scopes
 class Callme::DepFactory
   attr_reader :const_loader
@@ -11,7 +6,7 @@ class Callme::DepFactory
   # @param deps_metadata_storage [DepsMetadataStorage] storage of dep metadatas
   def initialize(const_loader, deps_metadata_storage)
     @const_loader           = const_loader
-    @deps_metadata_storage = deps_metadata_storage
+    @deps_metadata_storage  = deps_metadata_storage
     @singleton_scope        = Callme::Scopes::SingletonScope.new(self)
     @prototype_scope        = Callme::Scopes::PrototypeScope.new(self)
     @request_scope          = Callme::Scopes::RequestScope.new(self)

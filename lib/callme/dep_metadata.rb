@@ -18,7 +18,7 @@ class Callme::DepMetadata
     Callme::ArgsValidator.has_key!(options, :class)
 
     @name           = name
-    @dep_class     = options[:class]
+    @dep_class      = options[:class]
     @scope          = options[:scope] || :singleton
     @instance       = options[:instance].nil? ? true : options[:instance]
     @factory_method = options[:factory_method]
