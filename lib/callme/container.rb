@@ -85,6 +85,10 @@ module Callme
       @deps_metadata_storage.keys
     end
 
+    def inspect
+      %Q{<Callme::Container #{@deps_metadata_storage.values.map(&:name)}}
+    end
+
     # Load defined in dep classes
     # this is needed for production usage
     # for eager loading
