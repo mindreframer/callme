@@ -3,6 +3,7 @@ require 'callme/version'
 
 require 'callme/const_loaders/native'
 require 'callme/args_validator'
+require 'callme/contract_validator'
 require 'callme/errors'
 require 'callme/inject'
 require 'callme/container'

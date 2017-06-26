@@ -17,8 +17,8 @@ class Callme::DepsMetadataStorage
     @dep_metadatas[dep_metadata.name] = dep_metadata
   end
 
-  def dep_classes
-    @dep_metadatas.values.map(&:dep_class)
+  def values
+    @dep_metadatas.values
   end
 
   def keys

@@ -1,7 +1,7 @@
-# Stores dep specific data: dep class, name,
+# Stores dep specific data: dep class, name, contract,
 # scope and dep dependencies
 class Callme::DepMetadata
-  attr_reader :name, :dep_class, :scope, :instance, :factory_method, :attrs
+  attr_reader :name, :dep_class, :scope, :instance, :factory_method, :attrs, :contract
 
   # Constructor
   # @param name [Symbol] dep name
@@ -19,6 +19,7 @@ class Callme::DepMetadata
 
     @name           = name
     @dep_class      = options[:class]
+    @contract       = options[:contract]
     @scope          = options[:scope] || :singleton
     @instance       = options[:instance].nil? ? true : options[:instance]
     @factory_method = options[:factory_method]
@@ -42,6 +43,10 @@ class Callme::DepMetadata
 
   def has_factory_method?
     !!@factory_method
+  end
+
+  def has_contract?
+    !!@contract
   end
 
   class Attribute

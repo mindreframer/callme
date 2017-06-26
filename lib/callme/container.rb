@@ -89,10 +89,9 @@ module Callme
     # this is needed for production usage
     # for eager loading
     def eager_load_dep_classes
-      @deps_metadata_storage.dep_classes.each do |dep_class|
-        if !dep_class.is_a?(Class)
-          @const_loader.load_const(dep_class)
-        end
+      @deps_metadata_storage.values.each do |dep_metadata|
+        @const_loader.load_const(dep_metadata.dep_class)
+        @const_loader.load_const(dep_metadata.contract) if dep_metadata.contract
       end
     end
   end
