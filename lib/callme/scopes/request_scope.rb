@@ -17,17 +17,18 @@ class Callme::Scopes::RequestScope
   # @param dep_metadata [DepMetadata] dep metadata
   # @returns dep instance
   def get_dep(dep_metadata)
-    RequestStore.store[:_callme_deps] ||= {}
-    if dep = RequestStore.store[:_callme_deps][dep_metadata.name]
-      dep
-    else
-     @dep_factory.create_dep_and_save(dep_metadata, RequestStore.store[:_callme_deps])
-    end
+    store[dep_metadata.name] || @dep_factory.create_dep_and_save(dep_metadata, store)
   end
 
   # Delete dep from scope
   # @param dep_metadata [DepMetadata] dep metadata
   def delete_dep(dep_metadata)
-    RequestStore.store[:_callme_deps].delete(dep_metadata.name)
+    store.delete(dep_metadata.name)
+  end
+
+  private
+
+  def store
+    RequestStore.store[:_callme_deps] ||= {}
   end
 end
