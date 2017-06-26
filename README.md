@@ -30,11 +30,11 @@ logger.info('some message')
 ```
 
 Callme eliminates the manual injection step and injects dependencies by itself.
-To use it you need to instantiate Callme::Container and pass dependency definitions(we call them beans) to it:
+To use it you need to instantiate Callme::Container and pass dependency definitions(we call them deps) to it:
 ```ruby
 container = Callme::Container.new do |c|
-  c.bean(:appender, class: Appender)
-  c.bean(:logger, class: Logger) do
+  c.dep(:appender, class: Appender)
+  c.dep(:logger, class: Logger) do
     attr :appender, ref: :appender
   end
 end
@@ -58,11 +58,11 @@ end
 class Appender
 end
 ```
-With `inject` keyword you won't need to specify class dependencies in bean definition:
+With `inject` keyword you won't need to specify class dependencies in dep definition:
 ```ruby
 container = Callme::Container.new do |c|
-  c.bean(:appender, class: Appender)
-  c.bean(:logger, class: Logger)
+  c.dep(:appender, class: Appender)
+  c.dep(:logger, class: Logger)
 end
 ```
 
@@ -70,7 +70,7 @@ end
 
 ## Inheriting from other containers
 Quite often you will want to selectively override some parts of the system, use `Callme::Container.with_parent` to
-create a new container with all the beans copied from the parent container.
+create a new container with all the deps copied from the parent container.
 
 ```ruby
 class ContactBook
@@ -92,22 +92,22 @@ class AnotherTestContactValidator
 end
 
 parent = Callme::Container.new do |c|
-  c.bean(:contacts_repository,  class: ContactsRepository)
-  c.bean(:contact_validator,    class: ContactValidator)
-  c.bean(:contact_book,         class: ContactBook)
-  c.bean(:contact_book_service, class: "ContactBookService")
+  c.dep(:contacts_repository,  class: ContactsRepository)
+  c.dep(:contact_validator,    class: ContactValidator)
+  c.dep(:contact_book,         class: ContactBook)
+  c.dep(:contact_book_service, class: "ContactBookService")
 end
 puts parent[:contact_book_service].validator.class
 #=> ContactValidator
 
 testcontainer = Callme::Container.with_parent(parent) do |c|
-  c.bean(:contact_validator,    class: TestContactValidator)
+  c.dep(:contact_validator,    class: TestContactValidator)
 end
 puts testcontainer[:contact_book_service].validator.class
 #=> TestContactValidator
 
 third = Callme::Container.with_parent(parent) do |c|
-  c.bean(:contact_validator,    class: AnotherTestContactValidator)
+  c.dep(:contact_validator,    class: AnotherTestContactValidator)
 end
 
 puts third[:contact_book_service].validator.class
@@ -139,7 +139,7 @@ Or install it yourself as:
 
 # TODO
 1. Constructor based injection
-2. Scope registration, refactor BeanFactory. Callme:Container.register_scope(SomeScope)
+2. Scope registration, refactor DepFactory. Callme:Container.register_scope(SomeScope)
 3. Write documentation with more examples
 
 ## Author

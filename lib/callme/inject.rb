@@ -1,4 +1,4 @@
-# Extend object with the bean injection mechanism
+# Extend object with the dep injection mechanism
 # Example of usage:
 # class Bar
 # end
