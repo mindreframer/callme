@@ -1,4 +1,4 @@
-# Callme [![Build Status](https://travis-ci.org/mindreframer/callme.png)](https://travis-ci.org/mindreframer/callme) [![Code Climate](https://codeclimate.com/github/mindreframer/callme.png)](https://codeclimate.com/github/mindreframer/callme)
+# Callme [![Build Status](https://travis-ci.org/mindreframer/callme.svg)](https://travis-ci.org/mindreframer/callme) [![Code Climate](https://codeclimate.com/github/mindreframer/callme.svg)](https://codeclimate.com/github/mindreframer/callme)
 
 
 
