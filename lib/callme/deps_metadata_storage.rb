@@ -1,5 +1,5 @@
 # Storage of dep metadatas
-class Callme::BeansMetadataStorage
+class Callme::DepsMetadataStorage
   def initialize(dep_metadatas = {})
     @dep_metadatas = dep_metadatas
   end
@@ -12,7 +12,7 @@ class Callme::BeansMetadataStorage
   end
 
   # Saves a given +dep_metadata+ to the storage
-  # @param dep_metadata [BeanMetadata] dep metadata for saving
+  # @param dep_metadata [DepMetadata] dep metadata for saving
   def put(dep_metadata)
     @dep_metadatas[dep_metadata.name] = dep_metadata
   end

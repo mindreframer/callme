@@ -11,7 +11,7 @@ class Callme::Scopes::SingletonScope
 
   # Returns the same dep instance
   # on each call
-  # @param dep_metadata [BeanMetadata] dep metadata
+  # @param dep_metadata [DepMetadata] dep metadata
   # @returns dep instance
   def get_dep(dep_metadata)
     if dep = @deps[dep_metadata.name]
@@ -22,7 +22,7 @@ class Callme::Scopes::SingletonScope
   end
 
   # Delete dep from scope
-  # @param dep_metadata [BeanMetadata] dep metadata
+  # @param dep_metadata [DepMetadata] dep metadata
   def delete_dep(dep_metadata)
     @deps.delete(dep_metadata.name)
   end

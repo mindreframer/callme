@@ -4,11 +4,11 @@ require 'callme/scopes/prototype_scope'
 require 'callme/scopes/request_scope'
 
 # Instantiates deps according to their scopes
-class Callme::BeanFactory
+class Callme::DepFactory
   attr_reader :const_loader
 
   # Constructor
-  # @param deps_metadata_storage [BeansMetadataStorage] storage of dep metadatas
+  # @param deps_metadata_storage [DepsMetadataStorage] storage of dep metadatas
   def initialize(const_loader, deps_metadata_storage)
     @const_loader           = const_loader
     @deps_metadata_storage = deps_metadata_storage
@@ -22,17 +22,17 @@ class Callme::BeanFactory
   # instantiated dep
   # @param [Symbol] dep name
   # @return dep instance
-  # @raise MissingBeanError if dep with the specified name is not found
+  # @raise MissingDepError if dep with the specified name is not found
   def get_dep(name)
     dep_metadata = @deps_metadata_storage.by_name(name)
     unless dep_metadata
-      raise Callme::Errors::MissingBeanError, "Bean with name :#{name} is not defined"
+      raise Callme::Errors::MissingDepError, "Dep with name :#{name} is not defined"
     end
     get_dep_with_metadata(dep_metadata)
   end
 
   # Get dep by the specified +dep metadata+
-  # @param [BeanMetadata] dep metadata
+  # @param [DepMetadata] dep metadata
   # @return dep instance
   def get_dep_with_metadata(dep_metadata)
     get_scope_by_metadata(dep_metadata).get_dep(dep_metadata)
@@ -40,9 +40,9 @@ class Callme::BeanFactory
 
   # Create new dep instance according
   # to the specified +dep_metadata+
-  # @param [BeanMetadata] dep metadata
+  # @param [DepMetadata] dep metadata
   # @return dep instance
-  # @raise MissingBeanError if some of dep dependencies are not found
+  # @raise MissingDepError if some of dep dependencies are not found
   def create_dep_and_save(dep_metadata, deps_storage)
     if dep_metadata.dep_class.is_a?(Class)
       dep_class = dep_metadata.dep_class
@@ -66,11 +66,11 @@ class Callme::BeanFactory
 
   # Delete dep from the container by it's +name+.
   # @param [Symbol] dep name
-  # @raise MissingBeanError if dep with the specified name is not found
+  # @raise MissingDepError if dep with the specified name is not found
   def delete_dep(name)
     dep_metadata = @deps_metadata_storage.by_name(name)
     unless dep_metadata
-      raise Callme::Errors::MissingBeanError, "Bean with name :#{name} is not defined"
+      raise Callme::Errors::MissingDepError, "Dep with name :#{name} is not defined"
     end
     get_scope_by_metadata(dep_metadata).delete_dep(dep_metadata)
   end
@@ -81,7 +81,7 @@ class Callme::BeanFactory
     dep_metadata.attrs.each do |attr|
       dep_metadata = @deps_metadata_storage.by_name(attr.ref)
       unless dep_metadata
-        raise Callme::Errors::MissingBeanError, "Bean with name :#{attr.ref} is not defined, check #{dep.class}"
+        raise Callme::Errors::MissingDepError, "Dep with name :#{attr.ref} is not defined, check #{dep.class}"
       end
       case dep_metadata.scope
       when :singleton
@@ -109,7 +109,7 @@ class Callme::BeanFactory
     when :request
       @request_scope
     else
-      raise Callme::Errors::UnsupportedScopeError, "Bean with name :#{dep_metadata.name} has unsupported scope :#{dep_metadata.scope}"
+      raise Callme::Errors::UnsupportedScopeError, "Dep with name :#{dep_metadata.name} has unsupported scope :#{dep_metadata.scope}"
     end
   end
 end

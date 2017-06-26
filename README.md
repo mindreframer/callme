@@ -139,7 +139,7 @@ Or install it yourself as:
 
 # TODO
 1. Constructor based injection
-2. Scope registration, refactor BeanFactory. Callme:Container.register_scope(SomeScope)
+2. Scope registration, refactor DepFactory. Callme:Container.register_scope(SomeScope)
 3. Write documentation with more examples
 
 ## Author

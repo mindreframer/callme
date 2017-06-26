@@ -9,7 +9,7 @@ module Callme
 
   # Callme::Container is the central data store for registering objects
   # used for dependency injection. Users register classes by
-  # providing a name and a class to create the object(we call them deps). Beans
+  # providing a name and a class to create the object(we call them deps). Deps
   # may be retrieved by asking for them by name (via the [] operator)
   class Container
     DEFAULT_CONST_LOADER = Callme::ConstLoaders::Native
@@ -19,8 +19,8 @@ module Callme
     # @param &block [Proc] optional proc with container's deps definitions
     def initialize(const_loader = DEFAULT_CONST_LOADER, &block)
       @const_loader           = const_loader
-      @deps_metadata_storage = Callme::BeansMetadataStorage.new
-      @dep_factory           = Callme::BeanFactory.new(const_loader, @deps_metadata_storage)
+      @deps_metadata_storage = Callme::DepsMetadataStorage.new
+      @dep_factory           = Callme::DepFactory.new(const_loader, @deps_metadata_storage)
 
       block.call(self) if block_given?
     end
@@ -44,7 +44,7 @@ module Callme
       container              = self.new(const_loader)
       container.instance_eval do
         @deps_metadata_storage = deps_metadata_storage
-        @dep_factory           = Callme::BeanFactory.new(const_loader, deps_metadata_storage)
+        @dep_factory           = Callme::DepFactory.new(const_loader, deps_metadata_storage)
       end
       block.call(container) if block_given?
       container
@@ -54,12 +54,12 @@ module Callme
     # @param dep_name [Symbol] dep name
     # @param options [Hash] includes dep class and dep scope
     # @param &block [Proc] the block  which describes dep dependencies,
-    #                      see more in the BeanMetadata
+    #                      see more in the DepMetadata
     def dep(dep_name, options, &block)
       Callme::ArgsValidator.is_symbol!(dep_name, :dep_name)
       Callme::ArgsValidator.is_hash!(options, :options)
 
-      dep = Callme::BeanMetadata.new(dep_name, options, &block)
+      dep = Callme::DepMetadata.new(dep_name, options, &block)
       @deps_metadata_storage.put(dep)
     end
 
@@ -67,7 +67,7 @@ module Callme
     # @param dep_name [Symbol] dep name
     # @param options [Hash] includes dep class and dep scope
     # @param &block [Proc] the block  which describes dep dependencies,
-    #                      see more in the BeanMetadata
+    #                      see more in the DepMetadata
     def replace_dep(dep_name, options, &block)
       if @dep_factory.get_dep(dep_name)
         @dep_factory.delete_dep(dep_name)
@@ -76,7 +76,7 @@ module Callme
     end
 
     def reset!
-      @dep_factory = Callme::BeanFactory.new(@const_loader, @deps_metadata_storage)
+      @dep_factory = Callme::DepFactory.new(@const_loader, @deps_metadata_storage)
     end
 
     # Returns dep instance from the container

@@ -14,7 +14,7 @@ class Callme::Scopes::RequestScope
   # RequestStore is a wrapper for Thread.current
   # which clears it on each new HTTP request
   #
-  # @param dep_metadata [BeanMetadata] dep metadata
+  # @param dep_metadata [DepMetadata] dep metadata
   # @returns dep instance
   def get_dep(dep_metadata)
     RequestStore.store[:_callme_deps] ||= {}
@@ -26,7 +26,7 @@ class Callme::Scopes::RequestScope
   end
 
   # Delete dep from scope
-  # @param dep_metadata [BeanMetadata] dep metadata
+  # @param dep_metadata [DepMetadata] dep metadata
   def delete_dep(dep_metadata)
     RequestStore.store[:_callme_deps].delete(dep_metadata.name)
   end

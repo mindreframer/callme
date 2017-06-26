@@ -9,7 +9,7 @@ class Callme::Scopes::PrototypeScope
   end
 
   # Get new dep instance
-  # @param dep_metadata [BeanMetadata] dep metadata
+  # @param dep_metadata [DepMetadata] dep metadata
   # @returns dep instance
   def get_dep(dep_metadata)
     @dep_factory.create_dep_and_save(dep_metadata, {})
@@ -19,7 +19,7 @@ class Callme::Scopes::PrototypeScope
   # because Prototype scope doesn't store dep
   # then do nothing here
   #
-  # @param dep_metadata [BeanMetadata] dep metadata
+  # @param dep_metadata [DepMetadata] dep metadata
   def delete_dep(dep_metadata)
   end
 end
