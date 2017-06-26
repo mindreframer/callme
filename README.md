@@ -48,6 +48,7 @@ logger.info('some message')
 To simplify injection Callme allows you specify dependencies inside of your class:
 ```ruby
 class Logger
+  include Callme::Inject
   inject :appender
 
   def info(message)
@@ -74,10 +75,12 @@ create a new container with all the deps copied from the parent container.
 
 ```ruby
 class ContactBook
+  include Callme::Inject
   inject :contacts_repository
   inject :validator, ref: :contact_validator
 end
 class ContactBookService
+  include Callme::Inject
   inject :contacts_repository
   inject :validator, ref: :contact_validator
 end
