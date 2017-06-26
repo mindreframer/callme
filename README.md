@@ -140,11 +140,6 @@ Or install it yourself as:
 4. Push to the branch (`git push origin my-new-feature`)
 5. Create new Pull Request
 
-# TODO
-1. Constructor based injection
-2. Scope registration, refactor DepFactory. Callme:Container.register_scope(SomeScope)
-3. Write documentation with more examples
-
 ## Author
 Roman Heinrich, [@mindreframer](https://twitter.com/mindreframer)
 Albert Gazizov, [@deeper4k](https://twitter.com/deeper4k)
